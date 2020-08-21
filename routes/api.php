@@ -24,3 +24,5 @@ Route::group([
     Route::post('refresh', 'AuthController@refresh');
     Route::post('view', 'AuthController@view');
 });
+
+Route::resource('event', 'EventController')->middleware('jwt.auth');
