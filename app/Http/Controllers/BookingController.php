@@ -29,6 +29,15 @@ class BookingController extends Controller
     {
         $event = Event::findOrFail($request->event_id);
 
+        $allBookedTablesForEvent = Booking::where('event_id', $request->event_id)->get()->pluck('table_number')->toArray();
+
+        if(in_array($request->table_number, $allBookedTablesForEvent)){
+            return response()->json([
+                'status_code'   => 400,
+                'message'       => 'Table is allredy booked',
+            ], 400);
+        }
+
         $booking = Booking::create([
             'user_id'       => $request->user_id,
             'event_id'      => $request->event_id,
