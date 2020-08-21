@@ -26,3 +26,5 @@ Route::group([
 });
 
 Route::resource('event', 'EventController')->middleware('jwt.auth');
+
+Route::post('booking', 'BookingController@store')->middleware('jwt.auth');
