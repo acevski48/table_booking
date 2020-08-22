@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\BookingFormRequest;
 use App\Booking;
 use App\Event;
+use Carbon\Carbon;
 
 class BookingController extends Controller
 {
@@ -31,11 +32,27 @@ class BookingController extends Controller
 
         $allBookedTablesForEvent = Booking::where('event_id', $request->event_id)->get()->pluck('table_number')->toArray();
 
+        $availableTables = array_diff(range(1, $event->free_tables), $allBookedTablesForEvent);
+
+        if($event->date < Carbon::now()){
+            return response()->json([
+                'status_code'   => 400,
+                'message'       => 'Event no longer available',
+            ], 400);
+        }
+
         if(in_array($request->table_number, $allBookedTablesForEvent)){
             return response()->json([
                 'status_code'   => 400,
                 'message'       => 'Table is allredy booked',
             ], 400);
+        }
+
+        if($request->table_number < 1 || $request->table_number > $event->free_tables){
+            return response()->json([
+                'status_code'   => 400,
+                'message'       => 'Invalid table number, table number can be one of following ' .implode(',', $availableTables),
+            ]);
         }
 
         $booking = Booking::create([

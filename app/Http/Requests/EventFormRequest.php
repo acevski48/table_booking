@@ -47,7 +47,7 @@ class EventFormRequest extends FormRequest
             'name'          => 'required|string',
             'date'          => 'required|date',
             'artist'        => 'required|string',
-            'free_tables'   => 'required|integer',
+            'free_tables'   => 'required|integer|max:100',
         ];
     }
 }
