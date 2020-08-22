@@ -1,9 +1,5 @@
 # Table Booking
 
-```
-    composer
-```
-
 Clone the project from the GitHub repository by running the following command in the terminal
 
 ```
